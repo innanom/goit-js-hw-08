@@ -5,30 +5,38 @@ const messageEl = document.querySelector('textarea[name="message"]')
 const emailInputEl = document.querySelector('input[type="email"]')
 const messageInputEl = document.querySelector('textarea[name="message"]')
 
-const STORAGE_KEY = 'feedback-form-state';
+// const STORAGE_KEY = 'feedback-form-state';
 
-formEl.addEventListener('submit', onFormSubmit);
 formEl.addEventListener('input', throttle(onDataInput, 500));
+formEl.addEventListener('submit', onFormSubmit);
+
 
 let dataForm = {};
 savedDataInput();
 
 function onFormSubmit(event) {
+    if (emailInputEl.value === "" || messageInputEl.value === "") {
+    alert('Всі поля мають бути заповнені');
+        return;
+  }
     event.preventDefault();
-    event.target.reset();
     console.log(dataForm);
+    event.target.reset();
+    localStorage.removeItem('feedback-form-state');
+   
 }
 
 function onDataInput(event) {
     dataForm[event.target.name] = event.target.value;
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(dataForm));
+    localStorage.setItem('feedback-form-state', JSON.stringify(dataForm));
+    
 }
 
 function savedDataInput() {
-    const savedData = localStorage.getItem(STORAGE_KEY);
+    const savedData = localStorage.getItem('feedback-form-state');
     if (savedData) {
         dataForm = JSON.parse(savedData);
-        emailInputEl.value = dataForm.email;
-        messageInputEl.value =  dataForm.message;
+        emailInputEl.value = dataForm.email || "";
+        messageInputEl.value =  dataForm.message || "";
     }
 }
