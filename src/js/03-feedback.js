@@ -23,6 +23,8 @@ function onFormSubmit(event) {
     console.log(dataForm);
     event.target.reset();
     localStorage.removeItem('feedback-form-state');
+    dataForm = {};
+    
    
 }
 
